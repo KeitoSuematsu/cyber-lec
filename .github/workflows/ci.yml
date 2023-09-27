@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 permissions:
   contents: write
   pages: write
@@ -27,6 +31,9 @@ jobs:
 
     - name: Build Honkit
       run: npm run build
+
+    - name: Push to s3
+      run: aws s3 sync --delete --region ap-northeast-1 _book s3://keitosuematsu-cyber-lec-day4
 
     - name: Push to gh-pages
       uses: peaceiris/actions-gh-pages@v3
